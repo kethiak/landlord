@@ -21,8 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   //text field state
   TextEditingController email =new TextEditingController();
   TextEditingController password  =new TextEditingController();
-
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool _initialized = false;
   bool _error = false;
 var vraimail;
