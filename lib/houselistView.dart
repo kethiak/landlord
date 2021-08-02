@@ -1,50 +1,111 @@
+import 'dart:convert';
+import 'dart:io'as Io;
+import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:landlord/rental%20payment.dart';
 
 
 import 'Menu.dart';
 import 'Repair.dart';
+import 'houselistdetails.dart';
 import 'loginpage.dart';
 
-class MYAPP extends StatefulWidget {
-  const MYAPP({Key key}) : super(key: key);
 
-  @override
-  _MYAPPState createState() => _MYAPPState();
-}
-
-class _MYAPPState extends State<MYAPP> {
-
-  // ADD THIS HERE
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Side Menu Bar",
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-      ),
-      home: houselist(),
-    );
-  }
-}
 class houselist extends StatefulWidget{
   @override
 
   HouseListView createState() => HouseListView();
 
 }
+
 class HouseListView extends  State<houselist> {
+var Requestdata;
   final List houses = [
-    {"name": "Villas Cancun", "image": "images/image1.jpeg"},
-    {"name": "Appartment Zenobe A", "image": "images/Appartment Zenobe A.jpeg"},
-    {"name": "Blue House", "image": "images/Blue House.jpeg"},
-    {"name": "Viking Appartment", "image": "images/Viking Appartment.jpeg"},
-    {"name": "White House", "image": "images/White House.jpeg"},
-    {"name": "Studio D", "image": "images/Studio D.jpeg"},
-    {"name": "Champ Elysee", "image": "images/Champ Elysee.jpeg"}
+    {"name": "Villas Cancun", "image": "images/image1.jpeg" ,
+      "description":"maison de 4 ares-trois chambres-2 sanitaires",
+      "location":"bujumbura-muha-Gihosha-Avenue nkondo-numero 30",
+      "numero":"5948-345/383"
+    },
+    {"name": "Appartment Zenobe A", "image": "images/Appartment Zenobe A.jpeg","description":"",
+      "description":"maison de 4 ares-trois chambres-2 sanitaires",
+      "location":"bujumbura-muha-Gihosha-Avenue nkondo-numero 30",
+      "numero":"2747-904/575"
+    },
+    {"name": "Blue House", "image": "images/Blue House.jpeg",
+      "description":"maison de 4 ares-trois chambres-2 sanitaires",
+      "location":"bujumbura-muha-Gihosha-Avenue nkondo-numero 30"},
+    {"name": "Viking Appartment", "image": "images/Viking Appartment.jpeg",
+      "description":"maison de 4 ares-trois chambres-2 sanitaires",
+      "location":"bujumbura-muha-Gihosha-Avenue nkondo-numero 30",
+      "numero":"35348-3447/43"
+    },
+    {"name": "White House", "image": "images/White House.jpeg",
+      "description":"maison de 4 ares-trois chambres-2 sanitaires",
+      "location":"bujumbura-muha-Gihosha-Avenue nkondo-numero 30",
+      "numero":"2453-332/23"
+    },
+    {"name": "Studio D", "image": "images/Studio D.jpeg",
+      "description":"maison de 4 ares-trois chambres-2 sanitaires",
+      "location":"bujumbura-muha-Gihosha-Avenue nkondo-numero 30",
+      "numero":"5763-356/453"
+    },
+    {"name": "Champ Elysee", "image": "images/Champ Elysee.jpeg",
+      "description":"maison de 4 ares-trois chambres-2 sanitaires",
+      "location":"bujumbura-muha-Gihosha-Avenue nkondo-numero 30"
+    }
   ];
+  CollectionReference _collectionRef =
+  FirebaseFirestore.instance.collection('collection');
+  void getdocs(){
+    // Future getDocs() async {
+    //   QuerySnapshot querySnapshot = await Firestore.instance.collection("collection").getDocuments();
+    //   for (int i = 0; i < querySnapshot.documents.length; i++) {
+    //     var a = querySnapshot.documents[i];
+    //     print(a.documentID);
+    //   }
+    // }
+
+    ///Get all data from the collection that you found working, without using deprecated methods.
+
+
+
+
+  }
+  List requestlist;
+  var alldata;
+  Future<void> getDatarequest() async {
+    CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection('request');
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+
+    // Get data from docs and convert map to List
+  alldata = querySnapshot.docs.map((doc) => doc.data()).toList();
+    for (var i = 0; i < alldata.length; i++) {
+
+ var image=      Image.network(alldata[i]['image']);
+      print('image    ========= ${image}');
+      //Uint8List bytes  =base64.decode(alldata[i]['image']);
+      // var file = Io.File("decodedBezkoder.png");
+      // file.writeAsBytesSync(bytes);
+      // print('file  : ${bytes}');
+      setState(() {
+        requestlist=[
+          {
+            "clientname":alldata[i]['clientname'] ,
+            "housename":alldata[i]['housename'],
+            "image":'${Image.network(alldata[i]['image'])}'
+          }
+        ];
+      });
+    }
+    //print(alldata[0]['clientname']);
+  }
   var selectedIndex= 0;
+  bool ishouse=true;
+  bool isrequest=false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,98 +183,130 @@ class HouseListView extends  State<houselist> {
           ],
         ),
       ),
-      backgroundColor: Colors.blueGrey.shade400,
-      body: ListView.builder(
+      backgroundColor: Colors.blue,
+      body:isrequest==true?requestdata(context): ListView.builder(
           itemCount: houses.length,
           itemBuilder: (BuildContext context, int index) {
             return Card(
               elevation: 4.5,
               color: Colors.white,
               child: ListTile(
-                leading: CircleAvatar(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.blueGrey,
-                        borderRadius: BorderRadius.circular(13.9)),
-                    child: Image.asset('images/dream.jpg'),
-                  ),
+                leading:new CircleAvatar(
+
+                  backgroundImage: AssetImage('${houses.elementAt(index)["image"]}'),
                 ),
+                // Container(
+                //   decoration: BoxDecoration(
+                //       color: Colors.blueGrey,
+                //       borderRadius: BorderRadius.circular(10)),
+                //   child: Image.asset('${houses.elementAt(index)["image"]}'),
+                // ),
                 trailing: Text(("...")),
                 title: Text(houses[index]["name"]),
-                subtitle: Text("Sub"),
+               // subtitle: Text("Sub"),
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => HouseListViewDetails(
                               houseName: houses.elementAt(index)["name"],
-                              houseImage: houses.elementAt(index)["image"])));
+                              houseImage: houses.elementAt(index)["image"],
+                              houselocation: houses.elementAt(index)["location"],
+                              housedescription: houses.elementAt(index)["description"]
+                          )));
                 },
                 //onTap: () => debugPrint ("House name: ${houses.elementAt(index)}"
               ),
             );
           }),
       bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: Colors.black,
+
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: Icon(Icons.home_rounded), title: Text('home')),
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.add), title: Text('add')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.add), title: Text('add')),
+              icon: Icon(Icons.contact_page), title: Text('Requests')
 
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), title: Text('Profile')),
+          ),
         ],
         currentIndex: selectedIndex,
         fixedColor: Colors.blue,
 
-        onTap: onItemTapped,
+        onTap: (index){
+          // ignore: unnecessary_statements
+          print('selected index $index');
+          if(index==1){
+            setState(() {
+              isrequest=true;
+              ishouse=false;
+            });
+          }
+          if(index==0){
+            setState(() {
+              isrequest=false;
+              ishouse=true;
+            });
+          }
+
+          getDatarequest();
+        },
 
 
+      ),
+    );
+  }
+  Widget requestdata(BuildContext context){
+    return new Container(
+      color: Colors.white,
+      child:  new ListView(
+        children: [
+          new Container(
+              child: new Column(
+                  children:alldata.map<Widget>(
+
+                          (data) =>
+
+                      new Column(
+                        children: [
+                          new ListTile(
+                            leading:new CircleAvatar(
+                             // backgroundImage: AssetImage('${houses.elementAt(index)["image"]}'),
+                            ),
+                            // RotatedBox(
+                            //
+                            //     quarterTurns: 4,
+                            //     child: ClipRRect(
+                            //       borderRadius:
+                            //       BorderRadius.circular(10),
+                            //       child: Image.network(data['image']),
+                            //     )
+                            // ),
+
+                            title: new Text('${data['clientname']}'),
+                            subtitle: new Text('${data['housename']}'),
+                          ),
+                          new Divider(
+                            height: 2,
+                          ),
+                        ],
+                      )
+                  ).toList())
+          )
+
+        ],
       ),
     );
   }
   void onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
+      print('index $selectedIndex');
     });
   }
 }
 
 
 //New route (screen or page)
-class HouseListViewDetails extends StatelessWidget {
-  final String houseName;
-  final String houseImage;
 
-  const HouseListViewDetails({Key key, this.houseName, this.houseImage})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Houses "),
-        backgroundColor: Colors.blueGrey.shade900,
-      ),
-      body: Center(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Image.asset(
-                this.houseImage,
-                width: 259,
-                height: 189,
-              ),
-              RaisedButton(
-                  child: Text("Go back ${this.houseName}"),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

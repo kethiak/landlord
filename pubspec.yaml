@@ -72,7 +72,8 @@ flutter:
     - images/Champ Elysee.jpeg
     - images/view.jpeg
     - images/view.jpeg
-
+    - images/ecocash.gif
+    - images/lumicash.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:

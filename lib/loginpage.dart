@@ -6,10 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'Register.dart';
 import 'houselistView.dart';
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-}
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key key}) : super(key: key);
 
@@ -21,29 +18,12 @@ class _LoginPageState extends State<LoginPage> {
   //text field state
   TextEditingController email =new TextEditingController();
   TextEditingController password  =new TextEditingController();
-
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool _initialized = false;
   bool _error = false;
 var vraimail;
 var vraipass;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-void checkcredentials(){
-  if(email.text!=vraimail || password.text!=vraipass){
 
-
-
-      _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text('votre mot de pass ou email t incorect')));
-
-
-  }else{
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => houselist()));
-  }
-
-}
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
     try {
@@ -67,7 +47,10 @@ void checkcredentials(){
   //   //
   // }
 var data;
+var listlogin;
+ var  Listlogin;
   void _create() async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
     try {
       await firestore.collection('users').doc('tenant').set({
         'mail': 'kelly',
@@ -78,19 +61,45 @@ var data;
     }
   }
   void _read() async {
-    DocumentSnapshot documentSnapshot;
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+
+
+
     try {
-      documentSnapshot = await   firestore.collection('users').doc('tenant').get();
-      print('users=======${documentSnapshot.data()}');
+      CollectionReference _collectionRef =FirebaseFirestore.instance.collection('users');
+
+      QuerySnapshot querySnapshot = await _collectionRef.get();
+
+      // Get data from docs and convert map to List
       setState(() {
-        data=documentSnapshot.data();
-            vraimail=data['mail'];
-            vraipass=data['pass'];
+        Listlogin= querySnapshot.docs.map((doc) => doc.data()).toList();
       });
+     // documentSnapshot = await   firestore.collection('users').doc('tenant').get();
+      print('users=======${Listlogin}');
+
+      for(var i = 0; i <  Listlogin.length; i++) {
+        setState(() {
+          //   data=documentSnapshot.data();
+          vraimail=Listlogin[i][' mail'];
+          print('data======${Listlogin[i][' mail']}');
+          vraipass=Listlogin[i]['pass'];
+          print('data======${Listlogin[i]['pass']}');
+          if(email.text!=Listlogin[i][' mail'] || password.text!=Listlogin[i]['pass']){
+            _scaffoldKey.currentState.showSnackBar(new SnackBar(content: new Text('votre mot de pass ou email t incorect')));
+          }else{
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => houselist()));
+          }
+        });
+      }
+
       print('data======${data}');
       print('mail======${vraimail}');
       print('pass=====${vraipass}');
-      checkcredentials();
+
     } catch (e) {
       print(e);
     }
@@ -105,9 +114,9 @@ var data;
     return Scaffold(
         key:_scaffoldKey,
       appBar: new AppBar(
-        backgroundColor: Color(0xff8FB1CC),
-        title: new Text(''),
-        actions: <Widget>[],
+        backgroundColor: Colors.blue,
+        title: new Text('Login page'),
+
       ),
       body: SafeArea(
         child: ListView(
@@ -172,7 +181,10 @@ var data;
                 ),
               ),
               onTap: () async {
-null;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Register()));
                  //_create();
               },
             )

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'loginpage.dart';
@@ -11,8 +13,42 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
-
-
+  // void initializeFlutterFire() async {
+  //   try {
+  //     // Wait for Firebase to initialize and set `_initialized` state to true
+  //     await Firebase.initializeApp();
+  //     setState(() {
+  //       _initialized = true;
+  //     });
+  //   } catch(e) {
+  //     // Set `_error` state to true if Firebase initialization fails
+  //     setState(() {
+  //       _error = true;
+  //     });
+  //   }
+  // }
+  TextEditingController name=new TextEditingController();
+  TextEditingController lastname=new TextEditingController();
+  TextEditingController mail=new TextEditingController();
+  TextEditingController pass=new TextEditingController();
+  void _register() async {
+    await Firebase.initializeApp();
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      await firestore.collection('users').add({
+        "name":"${name.text}",
+        "lastname":"${lastname.text}",
+      " mail": "${mail.text}",
+       "pass": "${pass.text}",
+      });
+      print('nice !!! data saved');
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => LoginPage()));
+    } catch (e) {
+      print(e);
+      print('erroor!!!!');
+    }
+  }
   //text field state
   String email = '';
   String password = '';
@@ -53,8 +89,11 @@ class _RegisterState extends State<Register> {
                     labelText: 'First Name',
                     filled: true,
                   ),
-                  validator: (val) =>
-                      val.isEmpty ? 'Enter your First Name' : null,
+                  controller: name,
+                  //validator: (val) =>
+                  //    val.isEmpty ? 'Enter your First Name' : null,
+
+
                   onChanged: (val) {
                     setState(() => FirstName = val);
                   }),
@@ -63,8 +102,9 @@ class _RegisterState extends State<Register> {
                     labelText: 'Last Name',
                     filled: true,
                   ),
-                  validator: (val) =>
-                      val.isEmpty ? 'Enter your Last Name' : null,
+                  controller: lastname,
+                  //validator: (val) =>
+                //      val.isEmpty ? 'Enter your Last Name' : null,
                   onChanged: (val) {
                     setState(() => LastName = val);
                   }),
@@ -74,7 +114,8 @@ class _RegisterState extends State<Register> {
                     labelText: 'email',
                     filled: true,
                   ),
-                  validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                  controller: mail,
+              //    validator: (val) => val.isEmpty ? 'Enter an email' : null,
                   onChanged: (val) {
                     setState(() => email = val);
                   }),
@@ -84,9 +125,10 @@ class _RegisterState extends State<Register> {
                     labelText: 'Password',
                     filled: true,
                   ),
+                  controller: pass,
                   obscureText: true,
-                  validator: (val) =>
-                      val.length < 6 ? 'Enter a password 6+ chars long' : null,
+                  //validator: (val) =>
+                    //  val.length < 6 ? 'Enter a password 6+ chars long' : null,
                   onChanged: (val) {
                     setState(() => password = val);
                   }),
@@ -94,16 +136,19 @@ class _RegisterState extends State<Register> {
                 children: <Widget>[
                   FlatButton(
                     child: Text('CANCEL'),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                   RaisedButton(
                       color: Colors.orangeAccent,
                       child: Text('Register'),
                       onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          print(email);
-                          print(password);
-                        }
+                        _register();
+                        // if (_formKey.currentState.validate()) {
+                        //   print(email);
+                        //   print(password);
+                        // }
                       })
                 ],
               )
