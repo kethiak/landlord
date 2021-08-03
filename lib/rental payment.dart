@@ -1,4 +1,9 @@
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+
+import 'houselistView.dart';
 
 class BillSplitter extends StatefulWidget {
   @override
@@ -13,6 +18,11 @@ class _BillSplitterState extends State<BillSplitter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: new AppBar(
+        automaticallyImplyLeading: true,
+        title: new Text('Rent Payment'),
+        centerTitle: true,
+      ),
       body: Container(
         margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
         alignment: Alignment.center,
@@ -25,7 +35,7 @@ class _BillSplitterState extends State<BillSplitter> {
               width: 150,
               height: 150,
               decoration: BoxDecoration(
-                  color: Colors.purpleAccent.shade100,
+                  color: Colors.blue.shade100,
                   borderRadius: BorderRadius.circular(12.0)),
               child: Center(
                 child: Column(
@@ -36,7 +46,7 @@ class _BillSplitterState extends State<BillSplitter> {
                       style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 15.0,
-                          color: Colors.purple),
+                          color: Colors.blue),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(12.0),
@@ -45,7 +55,7 @@ class _BillSplitterState extends State<BillSplitter> {
                         style: TextStyle(
                             fontSize: 34.9,
                             fontWeight: FontWeight.bold,
-                            color: Colors.purple),
+                            color: Colors.blue),
                       ),
                     )
                   ],
@@ -103,12 +113,12 @@ class _BillSplitterState extends State<BillSplitter> {
                               margin: EdgeInsets.all(10.0),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(7.0),
-                                  color: Colors.purple.withOpacity(0.1)),
+                                  color: Colors.blue.withOpacity(0.1)),
                               child: Center(
                                 child: Text(
                                   "-",
                                   style: TextStyle(
-                                      color: Colors.purple,
+                                      color: Colors.blue,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 17.0),
                                 ),
@@ -119,7 +129,7 @@ class _BillSplitterState extends State<BillSplitter> {
                         Text(
                           "$_personCounter",
                           style: TextStyle(
-                              color: Colors.purple,
+                              color: Colors.blue,
                               fontWeight: FontWeight.bold,
                               fontSize: 17.0),
                         ),
@@ -134,13 +144,13 @@ class _BillSplitterState extends State<BillSplitter> {
                             height: 40.0,
                             margin: EdgeInsets.all(10.0),
                             decoration: BoxDecoration(
-                                color: Colors.purple.withOpacity(0.1),
+                                color: Colors.blue.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(7.0)),
                             child: Center(
                               child: Text(
                                 "+",
                                 style: TextStyle(
-                                    color: Colors.purple,
+                                    color: Colors.blue,
                                     fontSize: 17.0,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -156,14 +166,14 @@ class _BillSplitterState extends State<BillSplitter> {
                       children: <Widget>[
                         Text(
                           "Tip",
-                          style: TextStyle(color: Colors.grey.shade700),
+                          style: TextStyle(color: Colors.blue.shade700),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(18.0),
                           child: Text(
                             "\$ ${calculateTotalTip(_billAmount, _personCounter, _tipPercentage)}",
                             style: TextStyle(
-                                color: Colors.purple,
+                                color: Colors.blue,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 17.0),
                           ),
@@ -178,14 +188,14 @@ class _BillSplitterState extends State<BillSplitter> {
                         Text(
                           "$_tipPercentage%",
                           style: TextStyle(
-                              color: Colors.purple,
+                              color: Colors.blue,
                               fontSize: 17.0,
                               fontWeight: FontWeight.bold),
                         ),
                         Slider(
                             min: 0,
                             max: 100,
-                            activeColor: Colors.purple,
+                            activeColor: Colors.blue,
                             inactiveColor: Colors.grey,
                             divisions: 10, //optional
                             value: _tipPercentage.toDouble(),
@@ -195,9 +205,96 @@ class _BillSplitterState extends State<BillSplitter> {
                               });
                             })
                       ],
+                    ),
+          Text(
+            "Ways of Payments",
+            style: TextStyle(
+                fontWeight: FontWeight.normal,
+                fontSize: 15.0,
+                color: Colors.blue),),
+              new ListTile(
+                onTap: (){
+                  null;
+                },
+                leading:new GestureDetector(
+                  onTap: (){
+null;
+                  },
+                  child: RotatedBox(
+                      quarterTurns: 4,
+                      child: ClipRRect(
+                        borderRadius:
+                        BorderRadius.circular(10),
+                        child: new Image.asset(
+                          "images/ecocash.gif",
+                        ),
+                      )
+                  ),
+                ),
+               trailing: RotatedBox(
+                    quarterTurns: 4,
+                    child: ClipRRect(
+                      borderRadius:
+                      BorderRadius.circular(10),
+                      child: new Image.asset(
+                        "images/lumicash.png",
+                      ),
                     )
+                ),
+              )
                   ],
                 )),
+            new RaisedButton(
+              color: Colors.blue,
+              onPressed:(){
+
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                          contentPadding: EdgeInsets.only(top: 10.0),
+                          //  title:  new Text('Achat des unites $biller_name',style: Style.globalQrCode,textAlign:TextAlign.center,),
+                          elevation: 1,
+                          content: new Container(
+                              height: 200,
+                              padding: EdgeInsets.all(20),
+                              //  padding: EdgeInsets.only(left: 10,right: 10),
+//              color: Colors.black12,
+
+                              child:
+                              new Column(
+                                children: [
+                                  Text('Payment done successfuly!!!!',textAlign: TextAlign.center,
+                                      style:new TextStyle(color: Colors.green)),
+                                  new Icon(
+                                    Icons.check,
+                                    size: 50,
+                                    color: Colors.green,
+                                  ),
+                                  new RaisedButton(
+                                    color: Colors.green,
+                                    onPressed: (){
+                                      Navigator.pop(context);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>houselist()));
+                                    },
+                                    child: new Text('OK',style: new TextStyle(color: Colors.white),),
+
+                                  )
+
+                                ],
+                              )
+                          )
+                      );
+                    });
+              },
+              child: new Text('PAY',style: new TextStyle(color: Colors.white,fontSize: 14),),
+            )
           ],
         ),
       ),
