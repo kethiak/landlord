@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:landlord/hexcolor.dart';
 import 'dart:io';
 
 import 'houselistView.dart';
@@ -218,7 +219,75 @@ class _BillSplitterState extends State<BillSplitter> {
                 },
                 leading:new GestureDetector(
                   onTap: (){
-null;
+setState(() {
+  type='Ecocash';
+});
+showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10.0))),
+          contentPadding: EdgeInsets.only(top: 10.0),
+          //  title:  new Text('Achat des unites $biller_name',style: Style.globalQrCode,textAlign:TextAlign.center,),
+          elevation: 1,
+          content: new Container(
+              height: 200,
+              padding: EdgeInsets.all(20),
+              //  padding: EdgeInsets.only(left: 10,right: 10),
+//              color: Colors.black12,
+
+              child:
+              new Column(
+                children: [
+                  TextField(
+                    keyboardType:
+                    TextInputType.numberWithOptions(decimal: true),
+                    style: TextStyle(color: Colors.grey),
+                    decoration: InputDecoration(
+                        prefixText: "Sim card number",
+                        prefixIcon: Icon(Icons.attach_money)),
+                    onChanged: (String value) {
+                      try {
+                        _billAmount = double.parse(value);
+                      } catch (exception) {
+                        _billAmount = 0.0;
+                      }
+                    },
+                  ),
+                  TextField(
+                    keyboardType:
+                    TextInputType.numberWithOptions(decimal: true),
+                    style: TextStyle(color: Colors.grey),
+                    decoration: InputDecoration(
+                        prefixText: "Pin code",
+                        prefixIcon: Icon(Icons.attach_money)),
+                    onChanged: (String value) {
+                      try {
+                        _billAmount = double.parse(value);
+                      } catch (exception) {
+                        _billAmount = 0.0;
+                      }
+                    },
+                  ),
+
+                  new RaisedButton(
+                    color: Colors.green,
+                    onPressed: (){
+                      Navigator.pop(context);
+                      _paymentrequest();
+
+                    },
+                    child: new Text('Envoyer',style: new TextStyle(color: Colors.white),),
+
+                  )
+
+                ],
+              )
+          )
+      );
+    });
                   },
                   child: RotatedBox(
                       quarterTurns: 4,
@@ -231,76 +300,152 @@ null;
                       )
                   ),
                 ),
-               trailing: RotatedBox(
-                    quarterTurns: 4,
-                    child: ClipRRect(
-                      borderRadius:
-                      BorderRadius.circular(10),
-                      child: new Image.asset(
-                        "images/lumicash.png",
-                      ),
-                    )
-                ),
+               trailing:
+               new GestureDetector(
+                 child:RotatedBox(
+                     quarterTurns: 4,
+                     child: ClipRRect(
+                       borderRadius:
+                       BorderRadius.circular(10),
+                       child: new Image.asset(
+                         "images/lumicash.png",
+                       ),
+                     )
+                 ),
+                 onTap: (){
+                   setState(() {
+                     type='Lumicash';
+                   });
+                   showDialog(
+                       barrierDismissible: false,
+                       context: context,
+                       builder: (BuildContext context) {
+                         return AlertDialog(
+                             shape: RoundedRectangleBorder(
+                                 borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                             contentPadding: EdgeInsets.only(top: 10.0),
+                             //  title:  new Text('Achat des unites $biller_name',style: Style.globalQrCode,textAlign:TextAlign.center,),
+                             elevation: 1,
+                             content: new Container(
+                                 height: 200,
+                                 padding: EdgeInsets.all(20),
+                                 //  padding: EdgeInsets.only(left: 10,right: 10),
+//              color: Colors.black12,
+
+                                 child:
+                                 new Column(
+                                   children: [
+                                     TextField(
+                                       keyboardType:
+                                       TextInputType.numberWithOptions(decimal: true),
+                                       style: TextStyle(color: Colors.grey),
+                                       decoration: InputDecoration(
+
+                                           prefixIcon: Icon(Icons.attach_money)),
+                                       onChanged: (String value) {
+                                         try {
+                                           _billAmount = double.parse(value);
+                                         } catch (exception) {
+                                           _billAmount = 0.0;
+                                         }
+                                       },
+                                     ),
+                                     TextField(
+                                       keyboardType:
+                                       TextInputType.numberWithOptions(decimal: true),
+                                       style: TextStyle(color: Colors.grey),
+                                       decoration: InputDecoration(
+                                           prefixText: "Pin code",
+                                    //       prefixIcon: Icon(Icons.attach_money)
+                                         ),
+                                       onChanged: (String value) {
+                                         try {
+                                           _billAmount = double.parse(value);
+                                         } catch (exception) {
+                                           _billAmount = 0.0;
+                                         }
+                                       },
+                                     ),
+
+                                     new RaisedButton(
+                                       color: Colors.green,
+                                       onPressed: (){
+                                         Navigator.pop(context);
+                                         _paymentrequest();
+
+                                       },
+                                       child: new Text('Envoyer',style: new TextStyle(color: Colors.white),),
+
+                                     )
+
+                                   ],
+                                 )
+                             )
+                         );
+                       });
+                 },
+               )
+
               )
                   ],
                 )),
-            new RaisedButton(
-              color: Colors.blue,
-              onPressed:(){
-
-                showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                          contentPadding: EdgeInsets.only(top: 10.0),
-                          //  title:  new Text('Achat des unites $biller_name',style: Style.globalQrCode,textAlign:TextAlign.center,),
-                          elevation: 1,
-                          content: new Container(
-                              height: 200,
-                              padding: EdgeInsets.all(20),
-                              //  padding: EdgeInsets.only(left: 10,right: 10),
-//              color: Colors.black12,
-
-                              child:
-                              new Column(
-                                children: [
-                                  Text('Payment done successfuly!!!!',textAlign: TextAlign.center,
-                                      style:new TextStyle(color: Colors.green)),
-                                  new Icon(
-                                    Icons.check,
-                                    size: 50,
-                                    color: Colors.green,
-                                  ),
-                                  new RaisedButton(
-                                    color: Colors.green,
-                                    onPressed: (){
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>houselist()));
-                                    },
-                                    child: new Text('OK',style: new TextStyle(color: Colors.white),),
-
-                                  )
-
-                                ],
-                              )
-                          )
-                      );
-                    });
-              },
-              child: new Text('PAY',style: new TextStyle(color: Colors.white,fontSize: 14),),
-            )
+//             new RaisedButton(
+//               color: Colors.blue,
+//               onPressed:(){
+//
+//                 showDialog(
+//                     barrierDismissible: false,
+//                     context: context,
+//                     builder: (BuildContext context) {
+//                       return AlertDialog(
+//                           shape: RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.all(Radius.circular(10.0))),
+//                           contentPadding: EdgeInsets.only(top: 10.0),
+//                           //  title:  new Text('Achat des unites $biller_name',style: Style.globalQrCode,textAlign:TextAlign.center,),
+//                           elevation: 1,
+//                           content: new Container(
+//                               height: 200,
+//                               padding: EdgeInsets.all(20),
+//                               //  padding: EdgeInsets.only(left: 10,right: 10),
+// //              color: Colors.black12,
+//
+//                               child:
+//                               new Column(
+//                                 children: [
+//                                   Text('Payment done successfuly!!!!',textAlign: TextAlign.center,
+//                                       style:new TextStyle(color: Colors.green)),
+//                                   new Icon(
+//                                     Icons.check,
+//                                     size: 50,
+//                                     color: Colors.green,
+//                                   ),
+//                                   new RaisedButton(
+//                                     color: Colors.green,
+//                                     onPressed: (){
+//                                       Navigator.pop(context);
+//                                       Navigator.push(
+//                                           context,
+//                                           MaterialPageRoute(
+//                                               builder: (context) =>houselist()));
+//                                     },
+//                                     child: new Text('OK',style: new TextStyle(color: Colors.white),),
+//
+//                                   )
+//
+//                                 ],
+//                               )
+//                           )
+//                       );
+//                     });
+//               },
+//               child: new Text('PAY',style: new TextStyle(color: Colors.white,fontSize: 14),),
+//             )
           ],
         ),
       ),
     );
   }
-
+var type;
   calculateTotalPerPerson(double billAmount, int splitBy, int tipPercentage) {
     var totalPerPerson =
         (calculateTotalTip(billAmount, splitBy, tipPercentage) + billAmount) /
@@ -318,5 +463,49 @@ null;
       totalTip = (billAmount * tipPercentage) / 100;
     }
     return totalTip;
+  }
+
+
+  void _paymentrequest() async {
+
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    firestore.collection('payment') // <-- Doc ID where data should be updated.
+        .add(
+        {
+          'payment type':'$type',
+          'housenumber': '${data.housclient}',
+          'housename': '${data.housname}',
+          'price': '$_billAmount',
+          'persone': '$_personCounter',
+          'month': '${DateTime.now()}',
+              }
+    ) // <-- New data
+        .then((_) => {
+    print('Updated'),
+    Navigator.push(
+    context,
+    MaterialPageRoute(
+    builder: (context) =>houselist()))
+    }
+
+        )
+        .catchError((error) => print('Update failed: $error'));
+
+
+    // final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    // try {
+    //   await firestore.collection('request').doc('data').set({
+    //     'clientname': '${name.text}',
+    //     'housename': '${house.text}',
+    //     'living_room': '$_checked1',
+    //     'kitchen': '$_checked2',
+    //     'bed_room': '$_checked3',
+    //     'bathroom': '$_checked4',
+    //     'others':'$_checked1',
+    //     'image':'${imageString}'
+    //   });
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 }

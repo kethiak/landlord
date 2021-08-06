@@ -24,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
 var vraimail;
 var vraipass;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   // Define an async function to initialize FlutterFire
   void initializeFlutterFire() async {
     try {
@@ -62,11 +61,7 @@ var listlogin;
     }
   }
   void _read() async {
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-
-
-
+    await initializeFlutterFire();
     try {
       CollectionReference _collectionRef =FirebaseFirestore.instance.collection('users');
 

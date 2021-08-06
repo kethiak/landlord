@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:landlord/rental%20payment.dart';
 
 import 'Repair.dart';
+import 'maplocation.dart';
 class HouseListViewDetails extends StatelessWidget {
   final String houseName;
   final String houseImage;
@@ -64,6 +65,10 @@ class HouseListViewDetails extends StatelessWidget {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => BillSplitter()));
                       } , child: new Text('rent'),),
+                title:  new RaisedButton(onPressed:(){
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Mylocation()));
+                } , child: new Text('Map'),),
                 trailing:  new RaisedButton(onPressed:(){
     Navigator.push(
     context,

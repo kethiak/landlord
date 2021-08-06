@@ -93,14 +93,14 @@ class _REPORTState extends State<REPORT> {
 
     if (pickedFile != null) {
 
-      setState(()  {
+      setState(()  async {
         _image = File(pickedFile.path);
-        // List<int> imageBytes =
-        // await pickedFile.readAsBytes();
-        // imageString =
-        //     base64Encode(imageBytes);
-        // print(
-        //     'image--------------------------------------------------------------$imageString');
+        List<int> imageBytes =
+        await pickedFile.readAsBytes();
+        imageString =
+            base64Encode(imageBytes);
+        print(
+            'image--------------------------------------------------------------$imageString');
       });
       setState(()  {
         _image = File(pickedFile.path);

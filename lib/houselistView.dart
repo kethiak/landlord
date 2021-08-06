@@ -3,6 +3,7 @@ import 'dart:io'as Io;
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:landlord/hexcolor.dart';
 import 'package:landlord/rental%20payment.dart';
 
 
@@ -215,6 +216,8 @@ var Requestdata;
                 title: Text(houses[index]["name"]),
                // subtitle: Text("Sub"),
                 onTap: () {
+                  data.housname=houses[index]["name"];
+                  data.housclient=houses[index]["numero"];
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -263,8 +266,6 @@ var Requestdata;
 
           getDatarequest();
         },
-
-
       ),
     );
   }

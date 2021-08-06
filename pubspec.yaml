@@ -23,13 +23,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_maps_flutter: ^0.4.0
+
   image_picker: ^0.8.0+3
   flutter_rave: ^0.0.5
   notifications: ^1.1.0
   # firebase_database: 1.0.3
   firebase_core: 1.4.0
   cloud_firestore: 2.4.0
+  flutter_map: any
+  latlong: ^0.6.1
 
 
 
@@ -40,7 +42,9 @@ dependencies:
   line_awesome_flutter: any
   font_awesome_flutter: ^8.2.0
   url_launcher: ^5.0.2
-
+#  google_maps_flutter: ^0.0.3
+  flutter_google_places: ^0.3.0
+  location: ^4.3.0
   shared_preferences: ^0.4.3
 
 
